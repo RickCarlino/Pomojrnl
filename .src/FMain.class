@@ -1,0 +1,39 @@
+' Gambas class file
+
+Public state As FormState
+
+Public Sub Form_Open()
+  state = New FormState
+  Timer1.Delay = 500
+  Timer1.Enabled = True
+End
+
+Public Sub Timer1_Timer()
+  LCDMinSec.Text = state.mmss()
+  LCDTotalCount.Text = state.total
+  state.maybeFinish()
+End
+
+Public Sub InterruptionBtn_Click()
+  If state.paused
+    state.unpause()
+    InterruptionBtn.Background = -1
+    InterruptionBtn.Text = "Interuption"
+  Else
+    state.pause()
+    InterruptionBtn.Text = "Resume"
+    InterruptionBtn.Background = Color.Red
+  End If
+End
+
+Public Sub CancelBtn_Click()
+  state.resetPom()
+End
+
+Public Sub NewBtn_Click()
+  state.startPom()
+End
+
+Public Sub QuitBtn_Click()
+  Quit
+End

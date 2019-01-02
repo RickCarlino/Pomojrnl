@@ -1,0 +1,80 @@
+' Gambas class file
+
+Public pomStartTime As Date
+Public paused As Boolean
+Public total As Integer
+
+Private mins As Integer
+Private sec As Integer
+Private stashedSeconds As Integer
+
+Public Sub _new()
+  resetPom()
+  total = 0
+End
+
+Public Sub newPom()
+  mins = 0
+  sec = 0
+  stashedSeconds = 0
+  resetStartTime()
+End
+
+Private Sub resetStartTime()
+  pomStartTime = Now()
+End
+' 
+' Private Function extraMins() As Integer
+'   Return stashedSeconds % 60
+' End
+' 
+' Private Function extraSec() As Integer
+'   Return stashedSeconds - (extraMins() * 60)
+' End
+
+'' Display the current pomodoro's time in the format "mm:ss"
+Public Function mmss() As String
+  If Not paused
+     mins = DateDiff(pomStartTime, Now(), gb.Minute)
+     sec = DateDiff(pomStartTime, Now(), gb.Second)
+   End If
+   Return "" & Format(mins, "00") & ":" & Format(sec, "00")
+End
+
+'' Attempts to finish the current pomodoro, if possible. Returns true when successful.
+Public Function maybeFinish() As Boolean
+  If isFinished()
+  Else
+  End If
+End
+
+Private Sub stashTime()
+  stashedSeconds = (mins * 60) + sec
+  mins = 0
+  sec = 0
+End
+
+Public Sub unpause()
+  resetStartTime()
+  paused = False
+End
+
+
+Public Sub pause()
+  stashTime()
+  paused = True
+End
+
+Public Sub startPom()
+  unpause()
+  newPom()
+End
+
+Public Sub resetPom()
+  pause()
+  newPom()
+End
+
+Private Function isFinished() As Boolean
+  Return pomStartTime And (Not paused) And (mins > 25)
+End
