@@ -1,33 +1,65 @@
 ' Gambas class file
 
-Public pomStartTime As Date
+'' Is the user currently experiencing an interuption?
 Public paused As Boolean
+
+'' Total number of Pomodoro sessions completed. 
 Public total As Integer
 
-Private mins As Integer
+'' Time that the pomodoro session started OR time that last interuption ended, whichever came later.
+Private pomStartTime As Date
+
+'' Seconds elapse since start (or since last interuption ended)
 Private sec As Integer
+
+'' When a user is interupted, the current pom session time is "stashed" here so it can be resumed later.
 Private stashedSeconds As Integer
 
-Public Sub _new()
-  resetPom()
-  total = 0
-End
+Private mins As Integer
 
-Public Sub newPom()
+
+'' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
+Private Sub stashTime()
+  stashedSeconds = (mins * 60) + sec
   mins = 0
   sec = 0
-  stashedSeconds = 0
-  resetStartTime()
+End
+
+'' Stash progress and set `paused` flag to `True`
+Public Sub pause()
+  stashTime()
+  paused = True
 End
 
 Private Sub resetStartTime()
   pomStartTime = Now()
 End
 
+'' Completely reset the current pomodoro session (including time stash)
+Private Sub newPomSession()
+  mins = 0
+  sec = 0
+  stashedSeconds = 0
+  resetStartTime()
+End
+
+'' Pause and reset session
+Public Sub resetPom()
+  pause()
+  newPomSession()
+End
+
+Public Sub _new()
+  resetPom()
+  total = 0
+End
+
+'' Calculates number of minutes that were completed prior to last interuption.
 Private Function extraMins() As Integer
   Return stashedSeconds \ 60
 End
 
+'' Calculates seconds (but not minutes) prior to interuption. 
 Private Function extraSec() As Integer
   Return stashedSeconds - (extraMins() * 60)
 End
@@ -41,29 +73,13 @@ Public Function mmss() As String
    Return "" & Format(mins + extraMins(), "00") & ":" & Format(sec + extraSec(), "00")
 End
 
-Private Sub stashTime()
-  stashedSeconds = (mins * 60) + sec
-  mins = 0
-  sec = 0
-End
-
 Public Sub unpause()
   resetStartTime()
   paused = False
 End
 
-
-Public Sub pause()
-  stashTime()
-  paused = True
-End
-
+'' Begins a new pomodoro session.
 Public Sub startPom()
   unpause()
-  newPom()
-End
-
-Public Sub resetPom()
-  pause()
-  newPom()
+  newPomSession()
 End
