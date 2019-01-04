@@ -23,14 +23,14 @@ End
 Private Sub resetStartTime()
   pomStartTime = Now()
 End
-' 
-' Private Function extraMins() As Integer
-'   Return stashedSeconds % 60
-' End
-' 
-' Private Function extraSec() As Integer
-'   Return stashedSeconds - (extraMins() * 60)
-' End
+
+Private Function extraMins() As Integer
+  Return stashedSeconds \ 60
+End
+
+Private Function extraSec() As Integer
+  Return stashedSeconds - (extraMins() * 60)
+End
 
 '' Display the current pomodoro's time in the format "mm:ss"
 Public Function mmss() As String
@@ -38,14 +38,7 @@ Public Function mmss() As String
      mins = DateDiff(pomStartTime, Now(), gb.Minute)
      sec = DateDiff(pomStartTime, Now(), gb.Second)
    End If
-   Return "" & Format(mins, "00") & ":" & Format(sec, "00")
-End
-
-'' Attempts to finish the current pomodoro, if possible. Returns true when successful.
-Public Function maybeFinish() As Boolean
-  If isFinished()
-  Else
-  End If
+   Return "" & Format(mins + extraMins(), "00") & ":" & Format(sec + extraSec(), "00")
 End
 
 Private Sub stashTime()
@@ -73,8 +66,4 @@ End
 Public Sub resetPom()
   pause()
   newPom()
-End
-
-Private Function isFinished() As Boolean
-  Return pomStartTime And (Not paused) And (mins > 25)
 End
