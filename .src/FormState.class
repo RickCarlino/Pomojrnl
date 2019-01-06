@@ -3,26 +3,23 @@
 '' Is the user currently experiencing an interuption?
 Public paused As Boolean
 
-'' Total number of Pomodoro sessions completed. 
+'' Total number of Pomodoro sessions completed.
 Public total As Integer
 
 '' Time that the pomodoro session started OR time that last interuption ended, whichever came later.
 Private pomStartTime As Date
 
-'' Seconds elapse since start (or since last interuption ended)
-Private sec As Integer
+'' Storage area for temporary value- seconds since `pomStartTime`
+Private elapsedSeconds As Integer
 
 '' When a user is interupted, the current pom session time is "stashed" here so it can be resumed later.
 Private stashedSeconds As Integer
 
-Private mins As Integer
-
 
 '' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
 Private Sub stashTime()
-  stashedSeconds = (mins * 60) + sec
-  mins = 0
-  sec = 0
+  stashedSeconds = elapsedSeconds
+  elapsedSeconds = 0
 End
 
 '' Stash progress and set `paused` flag to `True`
@@ -37,8 +34,7 @@ End
 
 '' Completely reset the current pomodoro session (including time stash)
 Private Sub newPomSession()
-  mins = 0
-  sec = 0
+  elapsedSeconds = 0
   stashedSeconds = 0
   resetStartTime()
 End
@@ -55,23 +51,27 @@ Public Sub _new()
 End
 
 '' Calculates number of minutes that were completed prior to last interuption.
-Private Function extraMins() As Integer
-  Return stashedSeconds \ 60
+Private Function calculateMinutes(seconds As Integer) As Integer
+  Return seconds \ 60
 End
 
-'' Calculates seconds (but not minutes) prior to interuption. 
-Private Function extraSec() As Integer
-  Return stashedSeconds - (extraMins() * 60)
+'' Calculates seconds (but not minutes) prior to interuption.
+Private Function calculateSeconds(seconds As Integer) As Integer
+  Return seconds - (calculateMinutes(seconds) * 60)
 End
 
 '' Display the current pomodoro's time in the format "mm:ss"
 Public Function mmss() As String
+  Dim mins As Integer
+  Dim sec As Integer
   If Not paused
-     mins = DateDiff(pomStartTime, Now(), gb.Minute)
-     sec = DateDiff(pomStartTime, Now(), gb.Second)
-   End If
-   Print "This is wrong after 60 seconds- aggregate all instead"
-   Return "" & Format(mins + extraMins(), "00") & ":" & Format(sec + extraSec(), "00")
+    elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
+    mins = calculateMinutes(elapsedSeconds + stashedSeconds)
+    sec = calculateSeconds(elapsedSeconds + stashedSeconds)
+    Return Format(mins, "00") & ":" & Format(sec, "00")
+  Else
+    Return "--:--"
+  End If
 End
 
 Public Sub unpause()
