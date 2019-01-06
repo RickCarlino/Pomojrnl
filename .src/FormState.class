@@ -18,6 +18,8 @@ Private stashedSeconds As Integer
 '' 25 minutes, expressed in seconds.
 Public Const ONE_POMODORO As Integer = 1500
 
+Event Completion()
+
 '' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
 Private Sub stashTime()
   stashedSeconds = elapsedSeconds
@@ -66,6 +68,7 @@ Private Function bumpTimer()
   elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
   If elapsedSeconds >= ONE_POMODORO
     total += 1
+    Raise Completion()
     pause()
   End If
 End

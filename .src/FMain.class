@@ -3,9 +3,13 @@
 Public state As FormState
 
 Public Sub Form_Open()
-  state = New FormState
+  state = New FormState As "State"
   Timer1.Delay = 500
   Timer1.Enabled = True
+End
+
+Public Sub State_completion()
+  Print "You finished one! :tada:"
 End
 
 Public Sub Timer1_Timer()
