@@ -15,6 +15,8 @@ Private elapsedSeconds As Integer
 '' When a user is interupted, the current pom session time is "stashed" here so it can be resumed later.
 Private stashedSeconds As Integer
 
+'' 25 minutes, expressed in seconds.
+Public Const ONE_POMODORO As Integer = 1500
 
 '' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
 Private Sub stashTime()
@@ -60,12 +62,20 @@ Private Function calculateSeconds(seconds As Integer) As Integer
   Return seconds - (calculateMinutes(seconds) * 60)
 End
 
+Private Function bumpTimer()
+  elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
+  If elapsedSeconds >= ONE_POMODORO
+    total += 1
+    pause()
+  End If
+End
+
 '' Display the current pomodoro's time in the format "mm:ss"
 Public Function mmss() As String
   Dim mins As Integer
   Dim sec As Integer
   If Not paused
-    elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
+    bumpTimer()
     mins = calculateMinutes(elapsedSeconds + stashedSeconds)
     sec = calculateSeconds(elapsedSeconds + stashedSeconds)
     Return Format(mins, "00") & ":" & Format(sec, "00")
