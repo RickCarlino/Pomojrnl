@@ -37,8 +37,3 @@ Public Sub QuitBtn_Click()
   Quit
 End
 
-Public Sub LCDMinSec_MouseDown()
-
-  
-
-End

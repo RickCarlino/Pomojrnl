@@ -70,6 +70,7 @@ Public Function mmss() As String
      mins = DateDiff(pomStartTime, Now(), gb.Minute)
      sec = DateDiff(pomStartTime, Now(), gb.Second)
    End If
+   Print "This is wrong after 60 seconds- aggregate all instead"
    Return "" & Format(mins + extraMins(), "00") & ":" & Format(sec + extraSec(), "00")
 End
 
