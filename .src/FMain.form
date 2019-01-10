@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { Form Form
-  MoveScaled(0,0,44,7)
+  MoveScaled(0,0,46,7)
   Text = ("Pomodoro")
   Persistent = True
   Resizable = False
@@ -10,14 +10,14 @@
     #MoveScaled(34,0)
   }
   { LCDMinSec LCDLabel
-    MoveScaled(34,0,10,4)
+    MoveScaled(36,0,10,4)
     Background = Color.Black
     Foreground = Color.Green
     Text = ("00:00")
     Alignment = Align.Center
   }
   { BreakBtn Button
-    MoveScaled(16,0,6,7)
+    MoveScaled(16,0,8,7)
     Text = ("Break")
   }
   { NewBtn Button
@@ -25,7 +25,7 @@
     Text = ("New")
   }
   { CancelBtn Button
-    MoveScaled(22,0,7,7)
+    MoveScaled(24,0,7,7)
     Text = ("Cancel")
   }
   { InterruptionBtn Button
@@ -33,11 +33,11 @@
     Text = ("Interuption")
   }
   { QuitBtn Button
-    MoveScaled(29,0,5,7)
+    MoveScaled(31,0,5,7)
     Text = ("Exit")
   }
   { LCDTotalCount LCDLabel
-    MoveScaled(34,4,10,3)
+    MoveScaled(36,4,10,3)
     Background = Color.Black
     Foreground = Color.Violet
     Text = ("0")

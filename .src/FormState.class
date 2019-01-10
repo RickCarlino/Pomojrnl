@@ -16,7 +16,7 @@ Private elapsedSeconds As Integer
 Private stashedSeconds As Integer
 
 '' 25 minutes, expressed in seconds.
-Public Const ONE_POMODORO As Integer = 1500
+Private goalTime As Integer
 
 Event Completion()
 
@@ -51,6 +51,7 @@ End
 
 Public Sub _new()
   resetPom()
+  goalTime = 1500
   total = 0
 End
 
@@ -66,7 +67,7 @@ End
 
 Private Function bumpTimer()
   elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
-  If elapsedSeconds >= ONE_POMODORO
+  If elapsedSeconds >= goalTime
     total += 1
     Raise Completion()
     pause()
@@ -97,3 +98,14 @@ Public Sub startPom()
   unpause()
   newPomSession()
 End
+
+Public Sub startBreak()
+  goalTime = 300
+  startPom()
+End
+
+Public Sub stopBreak()
+  goalTime = 1500
+  resetPom()
+End
+

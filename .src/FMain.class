@@ -1,6 +1,7 @@
 ' Gambas class file
 
 Public state As FormState
+Public onBreak As Boolean
 
 Public Sub Form_Open()
   state = New FormState As "State"
@@ -41,3 +42,16 @@ Public Sub QuitBtn_Click()
   Quit
 End
 
+Public Sub BreakBtn_Click()
+  If onBreak
+    state.stopBreak()
+    onBreak = False
+    BreakBtn.Background = -1
+    BreakBtn.Text = "Break"
+  Else
+    state.startBreak()
+    onBreak = True
+    BreakBtn.Background = Color.Red
+    BreakBtn.Text = "Unbreak"
+  End If
+End
