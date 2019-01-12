@@ -1,0 +1,7 @@
+' Gambas class file
+
+
+Public Sub Button1_Click()
+  Shell "jrnl \"" & TextBox1.Text & "\""
+  Me.Close()
+End

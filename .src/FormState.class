@@ -18,6 +18,9 @@ Private stashedSeconds As Integer
 '' 25 minutes, expressed in seconds.
 Private goalTime As Integer
 
+Public Const ONE_POM As Integer = 1500
+Public Const ONE_BREAK As Integer = 300
+
 Event Completion()
 
 '' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
@@ -51,7 +54,7 @@ End
 
 Public Sub _new()
   resetPom()
-  goalTime = 1500
+  goalTime = ONE_POM
   total = 0
 End
 
@@ -100,12 +103,12 @@ Public Sub startPom()
 End
 
 Public Sub startBreak()
-  goalTime = 300
+  goalTime = ONE_BREAK
   startPom()
 End
 
 Public Sub stopBreak()
-  goalTime = 1500
+  goalTime = ONE_POM
   resetPom()
 End
 
