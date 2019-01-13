@@ -1,10 +1,13 @@
 # Gambas Project File 3.0
-Title=Pomodoro Crisis
+Title=Pomojrnl
 Startup=FMain
-Version=0.0.2
+Version=0.1.2
 Component=gb.image
 Component=gb.gui.qt
 Component=gb.form
+Description="A pomodoro timer GUI interface for jrnl.sh"
+Authors="Rick Carlino"
 TabSize=2
 Language=en_US
+Vendor=rickcarlinocom
 Packager=1

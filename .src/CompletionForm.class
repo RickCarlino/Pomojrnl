@@ -5,3 +5,7 @@ Public Sub Button1_Click()
   Shell "jrnl \"" & TextBox1.Text & "\""
   Me.Close()
 End
+
+Public Sub CloseBtn_Click()
+  Me.Close()
+End

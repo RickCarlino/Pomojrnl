@@ -7,35 +7,38 @@ Public Sub Form_Open()
   state = New FormState As "State"
   Timer1.Delay = 400
   Timer1.Enabled = True
+  StatusBar.Text = "Welcome to PomoJrnl"
 End
 
 Public Sub State_completion()
+  StatusBar.Text = "Pomodoro done!"
   CompletionForm.Show()
+  LCDTotalCount.Text = state.total
 End
 
 Public Sub Timer1_Timer()
   LCDMinSec.Text = state.mmss()
-  LCDTotalCount.Text = state.total
 End
 
 Public Sub InterruptionBtn_Click()
   If state.paused
     state.unpause()
     InterruptionBtn.Background = -1
-    InterruptionBtn.Text = "Interuption"
+    StatusBar.Text = "Session resumed."
   Else
     state.pause()
-    InterruptionBtn.Text = "Resume"
-    InterruptionBtn.Background = Color.Red
+    StatusBar.Text = "Session interupted."
   End If
 End
 
 Public Sub CancelBtn_Click()
   state.resetPom()
+    StatusBar.Text = "Session cancelled."
 End
 
 Public Sub NewBtn_Click()
   state.startPom()
+  StatusBar.Text = "Session in progress."
 End
 
 Public Sub QuitBtn_Click()
@@ -46,12 +49,10 @@ Public Sub BreakBtn_Click()
   If onBreak
     state.stopBreak()
     onBreak = False
-    BreakBtn.Background = -1
-    BreakBtn.Text = "Break"
+    StatusBar.Text = "Session resumed."
   Else
     state.startBreak()
     onBreak = True
-    BreakBtn.Background = Color.Red
-    BreakBtn.Text = "Unbreak"
+    StatusBar.Text = "On break."
   End If
 End

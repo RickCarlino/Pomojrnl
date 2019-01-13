@@ -71,7 +71,9 @@ End
 Private Function bumpTimer()
   elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
   If elapsedSeconds >= goalTime
-    total += 1
+    If goalTime == ONE_POM ' There are cleaner ways to do this.
+      total += 1
+    End If
     Raise Completion()
     pause()
   End If
