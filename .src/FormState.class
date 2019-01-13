@@ -1,5 +1,7 @@
 ' Gambas class file
 
+''' State storage and non-UI business logic (time tracking, state tracking, etc..)
+
 '' Is the user currently experiencing an interuption?
 Public paused As Boolean
 
@@ -18,9 +20,10 @@ Private stashedSeconds As Integer
 '' 25 minutes, expressed in seconds.
 Private goalTime As Integer
 
-Public Const ONE_POM As Integer = 1500
-Public Const ONE_BREAK As Integer = 300
+Public Const ONE_POM As Integer = 1500 ' 25 minutes
+Public Const ONE_BREAK As Integer = 300 ' 5 minutes
 
+'' Triggered when a break or pomodoro session finishes.
 Event Completion()
 
 '' Stash the seconds elapsed since start time. Reset `mins` and `sec` members.
@@ -58,16 +61,22 @@ Public Sub _new()
   total = 0
 End
 
-'' Calculates number of minutes that were completed prior to last interuption.
+'' Calculates number of *full* minutes for a given number of seconds.
+'' Example: 72 seconds is one minute.
 Private Function calculateMinutes(seconds As Integer) As Integer
   Return seconds \ 60
 End
 
-'' Calculates seconds (but not minutes) prior to interuption.
+'' Calculates remainder seconds when converting a quantity of seconds to minutes
+'' Example: calculateSeconds(62) '=> 2
 Private Function calculateSeconds(seconds As Integer) As Integer
   Return seconds - (calculateMinutes(seconds) * 60)
 End
 
+'' Called by timer event. Updates elapsed seconds, increments `total` sessions
+'' completed (if possible), emits the `completion` event (if possible), and
+'' finally, pauses the session after completion. Yes, this function
+'' does too much
 Private Function bumpTimer()
   elapsedSeconds = DateDiff(pomStartTime, Now(), gb.Second)
   If elapsedSeconds >= goalTime
