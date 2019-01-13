@@ -17,7 +17,9 @@ In that regard, the project has met its goals. I am unlikely to support future u
 
  * Ubuntu
  * Must have `jrnl` in your `PATH` (this app just shells out to `jrnl`)
+   * Run `which jrnl` to check
 
 # Installation
 
-WIP
+ * [Install Gambas](http://gambas.sourceforge.net/en/main.html)
+ * Download and run `./pomojrnl.gambas`
